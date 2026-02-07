@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors'); // Assure-toi que ce package est bien installé
+const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
@@ -15,17 +15,31 @@ const appartementsRoutes = require('./src/routes/appartementsRoutes');
 
 const app = express();
 
-// --- MODIFICATION ICI : CONFIGURATION CORS ---
+// --- CONFIGURATION CORS FLEXIBLE ---
+// Cette configuration accepte tes deux versions de liens Vercel
+const allowedOrigins = [
+  'https://lushi-immo-front.vercel.app',
+  'https://lushi-immo.vercel.app'
+];
+
 app.use(cors({
-    origin: 'https://lushi-immo-front.vercel.app', // Ton lien Vercel précis
+    origin: function (origin, callback) {
+        // autorise les requêtes sans origine (comme les outils de test) 
+        // ou les origines dans notre liste
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS non autorisé pour cette origine'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-// ----------------------------------------------
+// ------------------------------------
 
 app.use(express.json());
 
-// Servir les fichiers uploads en statique 
+// Servir les fichiers uploads
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(UPLOAD_DIR));
 
@@ -37,5 +51,5 @@ app.use('/api/appartements', appartementsRoutes);
 
 app.get('/', (req, res) => res.send('Lushi_immo backend running and connected to MongoDB Atlas'));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
