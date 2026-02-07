@@ -18,11 +18,11 @@ function Navbar() {
   return (
     <nav className="nav">
       <div className="nav-logo">
-        <h1 className="logo1">Lushi<span>Immo</span></h1>
+        <h1 className="logo1">Artemis<span>Project</span></h1>
       </div>
 
       {/* Icône Burger pour Mobile */}
-      <div className={`hamburger ${isOpen ? "active" : ""}`} onClick={toggleMenu}>
+      <div className={`hamburger ${isOpen ? "active" : "" }` } onClick={toggleMenu}>
         <span className="bar"></span>
         <span className="bar"></span>
         <span className="bar"></span>

@@ -40,7 +40,7 @@ function Login() {
     <div className="login-container">
       <div className="login-box">
         <div className="login-header">
-           <h2>Lushi<span>Immo</span></h2>
+           <h2>Artemis<span> Project</span></h2>
            <p className="subtitle">Administration</p>
         </div>
 

@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-container">
         {/* Colonne 1 : Logo et Description */ }
         <div className="footer-column" >
-          <h2 className="footer-logo">Lushi<span>Immo</span></h2>
+          <h2 className="footer-logo">Artemis<span> Project</span></h2>
           <p className="footer-desc">
             L'agence immobilière de référence à Lubumbashi. Nous vous accompagnons 
             dans la recherche de votre confort au cœur de la ville de cuivre.
