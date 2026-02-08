@@ -36,7 +36,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear() Lushi Immobilier. Tous droits réservés. </p>
+        <p>&copy; {new Date().getFullYear()} Lushi Immobilier. Tous droits réservés. </p>
       </div>
     </footer>
   );
@@ -44,3 +44,4 @@ const Footer = () => {
 
 
 export default Footer;
+
