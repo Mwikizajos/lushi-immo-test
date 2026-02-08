@@ -31,7 +31,7 @@ function Immeuble() {
         setLoading(false);
       }
     };
-    fetchAppartements(); // Je te conseille de vérifier si cette fonction n'est pas fetchImmeubles()
+    // Je te conseille de vérifier si cette fonction n'est pas fetchImmeubles()
     fetchImmeubles();
   }, []);
 
@@ -80,5 +80,6 @@ function Immeuble() {
     </div>
   );
 }
+
 
 export default Immeuble;
