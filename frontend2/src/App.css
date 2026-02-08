@@ -1,0 +1,44 @@
+/* === Thème Lushi Immobilier Corrigé === */
+
+:root {
+  --bleu: #0A2647;
+  --orange: #FF8C00;
+  --gris-fond: #f9fafb;
+  --blanc: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--gris-fond);
+  color: #333;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  overflow-x: hidden; /* Empêche le scroll horizontal parasite */
+}
+
+.App {
+  text-align: center;
+  background: var(--blanc);
+  width: 100%; /* Utilise toute la largeur */
+  margin: 0;
+  padding: 0;
+  /* On enlève le box-shadow ici pour que les sections 
+     comme le Hero prennent tout l'écran proprement */
+}
+
+/* On s'assure que les images ne dépassent jamais */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive pour les titres globaux */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  p {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+}

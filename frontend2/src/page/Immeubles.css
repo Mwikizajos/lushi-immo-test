@@ -1,0 +1,132 @@
+.immeuble-page {
+  padding: 60px 5%;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.page-header h2 {
+  color: #0A2647; /* Ton Bleu Lushi */
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.header-line {
+  width: 80px;
+  height: 4px;
+  background: #FF8C00; /* Ton Orange */
+  margin: 15px auto;
+  border-radius: 2px;
+}
+
+/* Grille Responsive Magnifique */
+.immeuble-container {
+  display: grid;
+  /* On dit à la grille : crée autant de colonnes de 320px que possible */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.immeuble-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(10, 38, 71, 0.05);
+  transition: all 0.4s ease;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.immeuble-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(10, 38, 71, 0.15);
+}
+
+.card-image-box {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.immeuble-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.5s;
+}
+
+.immeuble-card:hover .immeuble-image {
+  transform: scale(1.1);
+}
+
+.location-tag {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(10, 38, 71, 0.85);
+  color: white;
+  padding: 6px 15px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter:blur(5px);
+}
+
+.card-content {
+  padding: 25px;
+  text-align: left;
+}
+
+.card-content h3 {
+  color: #0A2647;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.desc-text {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  height: 50px; /* Aligne les boutons si les descriptions ont des tailles différentes */
+}
+
+.voir-plus-btn {
+  display: block;
+  text-align: center;
+  background: #0A2647;
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.voir-plus-btn:hover {
+  background: #FF8C00; /* Switch en Orange au hover */
+}
+
+/* --- MEDIA QUERIES --- */
+
+@media (max-width: 768px) {
+  .immeuble-page {
+    padding: 40px 20px;
+  }
+  
+  .page-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .immeuble-container {
+    grid-template-columns: 1fr; /* Une seule colonne sur téléphone */
+    gap: 25px;
+  }
+}

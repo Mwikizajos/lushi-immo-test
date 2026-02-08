@@ -1,0 +1,109 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+}
+
+.login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(10, 38, 71, 0.1);
+    width: 100%;
+    max-width: 450px;
+    border-top: 5px solid #FF8C00; /* Ta barre orange en haut */
+}
+
+.login-header h2 {
+    color: #0A2647; /* Ton Bleu */
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.login-header span {
+    color: #FF8C00; /* Ton Orange */
+}
+
+.subtitle {
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #0A2647;
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.login-form input:focus {
+    border-color: #FF8C00;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #0A2647; /* Bleu Marine */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #FF8C00; /* Change en orange au survol */
+    transform: translateY(-2px);
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border-left: 4px solid #dc2626;
+}
+
+.help-text {
+    margin-top: 25px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 30px 20px;
+    }
+    
+    .login-header h2 {
+        font-size: 1.6rem;
+    }
+}
