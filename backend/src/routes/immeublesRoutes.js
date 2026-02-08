@@ -1,25 +1,26 @@
-//GRADISCORE : MODIFICATIONS DES ROUTES ICI AUSSI 
+
 const express = require('express');
 const router = express.Router();
-// GRADISCORE : Je fais la meme chose pour toutes les  routes mais change juste le nom
-const ctrl = require('../controllers/immeublesController');
-//GRADISCORE : Le middleware de stockage avec la librairie multer  
-const upload = require('../middlewares/multer-config');
 
+// Import des contrôleurs et middlewares
+const ctrl = require('../controllers/immeublesController');
+const upload = require('../middlewares/multer-config');
 const auth = require("../middlewares/authMiddleware");
 
-router.get("/users", auth, (req, res) => {
-  res.json({ message: "Accès autorisé" });
-});
-//GRADISCORE : j'utilise les fonctions que j'ai préparées dans le contrôleur
-
+// 1. Routes Publiques (accessibles par tout le monde)
 router.get('/count', ctrl.getallnumber);           
 router.get('/', ctrl.getAll);
-     
-router.post('/', upload.single('image'), ctrl.create);          
-router.put('/:id', upload.single('image'), ctrl.update);        
-router.delete('/:id', ctrl.remove);   
-router.get('/:id', ctrl.getById);  
+router.get('/:id', ctrl.getById);
 
+// 2. Routes Protégées (nécessitent d'être connecté)
+// Note l'ordre : 'auth' d'abord, puis 'upload'
+router.post('/', auth, upload.single('image'), ctrl.create);          
+router.put('/:id', auth, upload.single('image'), ctrl.update);        
+router.delete('/:id', auth, ctrl.remove);
+
+// Route de test pour la connexion
+router.get("/verify-auth", auth, (req, res) => {
+  res.json({ message: "Accès autorisé", user: req.user });
+});
 
 module.exports = router;

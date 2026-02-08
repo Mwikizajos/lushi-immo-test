@@ -1,6 +1,4 @@
-//GRADISCORE : JAI FAIS DES MODIFS ICI AUSSI 
 const Immeuble = require('../models/immeuble');
-const path = require('path');
 
 //  GET /api/immeubles
 exports.getAll = async (req, res) => {
@@ -12,17 +10,16 @@ exports.getAll = async (req, res) => {
     }
 };
 
-//compter tout les immeubles existants 
+// Compter tous les immeubles existants 
 exports.getallnumber = async(req, res) => {
     try {
-        //methode pour compter les immeubles 
         const total = await Immeuble.countDocuments();
         res.status(200).json({
-            success:true,
+            success: true,
             nombreTotal: total
         });
-    }catch (err){
-        res.status(500).json({messsage:"erreur lors du comptage des immeubles ", error});
+    } catch (err) {
+        res.status(500).json({ message: "Erreur lors du comptage des immeubles", error: err.message });
     }
 };
 
@@ -41,21 +38,21 @@ exports.create = async (req, res) => {
     try {
         const { name, adress, description, proprietaire_id } = req.body;
         
-        // Gestion du chemin de l'image (Upload)
-        let imagePath = req.file ? `uploads/${req.file.filename}` : null;
+        // MODIFICATION ICI : On récupère l'URL Cloudinary via req.file.path
+        let imagePath = req.file ? req.file.path : null;
 
         const nouveauImmeuble = new Immeuble({
             name,
             adress,
             description,
             proprietaire_id: proprietaire_id || null,
-            image: imagePath
+            image: imagePath // Enregistre l'URL HTTPS complète
         });
 
         await nouveauImmeuble.save();
         res.status(201).json({ 
             id: nouveauImmeuble._id, 
-            message: 'Immeuble créé avec succès !' 
+            message: 'Immeuble créé avec succès sur Cloudinary !' 
         });
     } catch (err) {
         res.status(500).json(err);
@@ -67,15 +64,15 @@ exports.update = async (req, res) => {
     try {
         const updateData = { ...req.body };
         
-        // Si une nouvelle image est téléchargée, on met à jour le chemin
+        // MODIFICATION ICI : Si une nouvelle image est téléchargée
         if (req.file) {
-            updateData.image = `uploads/${req.file.filename}`;
+            updateData.image = req.file.path; // On met à jour avec la nouvelle URL Cloudinary
         }
 
         const updatedImmeuble = await Immeuble.findByIdAndUpdate(
             req.params.id, 
             updateData, 
-            { new: true } // Pour renvoyer l'objet modifié
+            { new: true }
         );
 
         if (!updatedImmeuble) return res.status(404).json({ message: "Non trouvé" });

@@ -1,47 +1,41 @@
-//GRADISCORE : c'est dans ce fichier ou je fais l'invocation du model appartement en mode mongoose 
-const fs = require('fs');
-const path = require ('path');
-const Appartement = require("../models/appartement"); // GRADISCORE :j'importe le modèle, plus la DB directe
-const appartement = require('../models/appartement');
-// CGRADISCORE : CEST POUR CA QUE JE KIFF LE SQL 😏
+// On n'a plus besoin de fs et path car tout est sur le cloud !
+const Appartement = require("../models/appartement");
 
-//  Récupérer tous les appartements
+// Récupérer tous les appartements
 exports.getAllAppartements = async (req, res) => {
     try {
         const rows = await Appartement.find().populate('immeuble_id');
         res.json(rows);
     } catch (error) {
-        res.status(500).json({ message: "Erreur interne", error });
+        res.status(500).json({ message: "Erreur interne", error: error.message });
     }
 };
 
-//recupere les nombres total des appartements 
+// Récupérer le nombre total d'appartements 
 exports.getallnumber = async(req, res) => {
     try {
-        //methode pour compter les immeubles 
         const total = await Appartement.countDocuments();
         res.status(200).json({
-            success:true,
+            success: true,
             nombreTotal: total
         });
-    }catch (err){
-        res.status(500).json({messsage:"erreur lors du comptage des Appartements ", error});
+    } catch (err) {
+        res.status(500).json({ message: "Erreur lors du comptage", error: err.message });
     }
 };
 
-//  Récupérer tous les appart d'un immeuble 
+// Récupérer tous les appartements d'un immeuble 
 exports.getByImmeuble = async (req, res) => {
     try {
         const { immeubleId } = req.params;
-        // find() avec un filtre et sort() pour le triag
         const results = await Appartement.find({ immeuble_id: immeubleId }).sort({ created_at: -1 });
         res.json(results);
     } catch (error) {
-        res.status(500).json({ message: "Erreur", error });
+        res.status(500).json({ message: "Erreur", error: error.message });
     }
 };
 
-//  Récupérer un appartement par ID
+// Récupérer un appartement par ID
 exports.getAppartementById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -52,7 +46,7 @@ exports.getAppartementById = async (req, res) => {
         }
         res.json(appartement);
     } catch (error) {
-        res.status(500).json({ message: "Erreur interne", error });
+        res.status(500).json({ message: "Erreur interne", error: error.message });
     }
 };
 
@@ -61,21 +55,21 @@ exports.createAppartement = async (req, res) => {
     try {
         const data = { ...req.body };
 
-        // On vérifie si Multer a reçu des fichiers (tableau req.files)
+        // MODIFICATION CLOUDINARY : 
+        // req.files contient maintenant les URLs Cloudinary dans la propriété 'path'
         if (req.files && req.files.length > 0) {
-            // On crée un tableau avec les chemins de chaque photo
-            data.images = req.files.map(file => `uploads/${file.filename}`);
+            data.images = req.files.map(file => file.path); // URL complète https://...
         }
 
         const nouvelAppart = new Appartement(data);
         await nouvelAppart.save();
 
         res.status(201).json({ 
-            message: "Appartement avec galerie créé !", 
+            message: "Appartement avec galerie Cloudinary créé !", 
             data: nouvelAppart 
         });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la création", error });
+        res.status(500).json({ message: "Erreur lors de la création", error: error.message });
     }
 };
 
@@ -84,58 +78,39 @@ exports.updateAppartement = async (req, res) => {
     try {
         const data = { ...req.body };
 
-        // 1. Si de nouvelles images sont envoyées
+        // MODIFICATION CLOUDINARY :
         if (req.files && req.files.length > 0) {
-            // On crée le nouveau tableau de chemins
-            data.images = req.files.map(file => `uploads/${file.filename}`);
-            
-            // GRADISCORE NOTE : Ici, on remplace les anciennes photos par les nouvelles.
-            // Optionnel : Tu pourrais ajouter une logique pour supprimer les anciens fichiers 
-            
+            data.images = req.files.map(file => file.path); // On remplace par les nouvelles URLs
         }
 
-        // 2. Mise à jour dans MongoDB
         const updated = await Appartement.findByIdAndUpdate(
             req.params.id, 
             data, 
-            { new: true } // Pour renvoyer l'objet modifié et non l'ancien
+            { new: true }
         );
 
         if (!updated) return res.status(404).json({ message: "Appartement non trouvé" });
 
         res.json({ message: 'Appartement mis à jour avec succès', data: updated });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la modification", error });
+        res.status(500).json({ message: "Erreur lors de la modification", error: error.message });
     }
 };
 
-//  Supprimer un appartement
+// Supprimer un appartement
 exports.deleteAppartement = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // 1. On cherche l'appartement d'abord
-        const appartement = await Appartement.findById(id);
-        if (!appartement) return res.status(404).json({ message: "Appartement non trouvé" });
+        // Avec Cloudinary, on ne supprime pas manuellement les fichiers sur le disque dur
+        // Les images resteront sur Cloudinary sauf si tu configures la suppression via leur API (plus complexe)
+        // Pour l'instant, on se concentre sur le nettoyage de la DB
+        const deleted = await Appartement.findByIdAndDelete(id); 
 
-        // 2. On supprime les images du dossier uploads s'il y en a
-        if (appartement.images && appartement.images.length > 0) {
-            appartement.images.forEach(imagePath => {
-                // On construit le chemin complet vers le fichier
-                const fullPath = path.join(__dirname, '..', '..', imagePath);
-                
-                // On vérifie si le fichier existe et on le supprime
-                if (fs.existsSync(fullPath)) {
-                    fs.unlinkSync(fullPath);
-                }
-            });
-        }
+        if (!deleted) return res.status(404).json({ message: "Appartement non trouvé" });
 
-        // 3. Enfin, on le supprime de MongoDB
-        await Appartement.findByIdAndDelete(id); 
-
-        res.json({ message: "Appartement et ses images supprimés avec succès" });
+        res.json({ message: "Appartement supprimé de la base de données" });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la suppression", error });
+        res.status(500).json({ message: "Erreur lors de la suppression", error: error.message });
     }
 };
